@@ -29,8 +29,9 @@ function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 📌 UPDATE THIS URL — Your Render backend link:
-  const BACKEND_URL = "https://xiaodrog.onrender.com/send-email";
+  // ⭐ Your NEW Vercel backend URL:
+  const BACKEND_URL =
+    "https://portfolio-backend-r6qw-9ljx1ryfj-addy12bags-projects.vercel.app/api/send-email";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +40,7 @@ function Contact() {
     setStatusType("loading");
 
     try {
-      const response = await fetch("https://xiaodrog.onrender.com/send-email", {
+      const response = await fetch(BACKEND_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -57,7 +58,7 @@ function Contact() {
       }
     } catch (error) {
       console.error(error);
-      setStatus("Server Error — backend may be sleeping.");
+      setStatus("Server Error — please try again.");
       setStatusType("error");
     }
   };
