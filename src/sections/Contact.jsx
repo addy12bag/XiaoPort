@@ -39,7 +39,7 @@ function Contact() {
     setStatusType("loading");
 
     try {
-      const response = await fetch(BACKEND_URL, {
+      const response = await fetch("https://xlaodrog.onrender.com/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
