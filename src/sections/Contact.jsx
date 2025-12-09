@@ -31,7 +31,7 @@ function Contact() {
 
   // ⭐ Your NEW Vercel backend URL:
   const BACKEND_URL =
-    "https://portfolio-backend-r6qw-9ljx1ryfj-addy12bags-projects.vercel.app/api/send-email";
+    "https://portfolio-backend-l9ma-fugk6cyzu-addy12bags-projects.vercel.app/api/send-email";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
