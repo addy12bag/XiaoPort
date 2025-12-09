@@ -23,17 +23,23 @@ function ContactRow({ label, value, href }) {
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("");
+  const [statusType, setStatusType] = useState(""); // success | error | loading
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // 📌 UPDATE THIS URL — Your Render backend link:
+  const BACKEND_URL = "https://xiaodrog.onrender.com/send-email";
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setStatus("Sending...");
+    setStatusType("loading");
 
     try {
-      const response = await fetch("http://localhost:5000/send-email", {
+      const response = await fetch(BACKEND_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -42,14 +48,17 @@ function Contact() {
       const data = await response.json();
 
       if (data.success) {
-        setStatus("Message Sent Successfully!");
+        setStatus("Message sent successfully!");
+        setStatusType("success");
         setForm({ name: "", email: "", message: "" });
       } else {
         setStatus("Failed to send message.");
+        setStatusType("error");
       }
     } catch (error) {
       console.error(error);
-      setStatus("Server Error: Could not send message.");
+      setStatus("Server Error — backend may be sleeping.");
+      setStatusType("error");
     }
   };
 
@@ -64,7 +73,7 @@ function Contact() {
       </div>
 
       <div className="contact-grid">
-        {/* Contact Info (Left side) */}
+        {/* ---------- LEFT SIDE INFO ---------- */}
         <div className="contact-info">
           <p>
             Whether it’s a research-backed ML system, a production-ready web
@@ -93,7 +102,7 @@ function Contact() {
           </div>
         </div>
 
-        {/* Contact Form (Right side) */}
+        {/* ---------- RIGHT SIDE FORM ---------- */}
         <form className="contact-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <label>
@@ -138,16 +147,21 @@ function Contact() {
           </div>
 
           <button type="submit" className="btn btn-primary btn-full">
-            Send Signal
+            {statusType === "loading" ? "Sending..." : "Send Signal"}
           </button>
 
-          {/* Status text */}
+          {/* STATUS MESSAGE */}
           {status && (
             <p
               style={{
                 marginTop: "12px",
-                color: "var(--accent-strong)",
                 fontSize: "0.9rem",
+                color:
+                  statusType === "success"
+                    ? "var(--accent-strong)"
+                    : statusType === "error"
+                    ? "#ff8080"
+                    : "var(--text-muted)",
               }}
             >
               {status}
