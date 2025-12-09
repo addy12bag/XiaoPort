@@ -1,16 +1,17 @@
 export function playUiSound(type, enabled) {
-  if (!enabled) return; // sound off → do nothing
+  if (!enabled) return;
 
   let src = null;
 
-  if (type === "click") src = "/sounds/click.wav";
-  if (type === "section") src = "/sounds/section-change.wav";
+  if (type === "click") src = "/ai-orb-portfolio/sounds/click.wav";
+  if (type === "section") src = "/ai-orb-portfolio/sounds/section-change.wav";
 
   if (!src) return;
 
   const audio = new Audio(src);
-  audio.volume = 0.4; // keep subtle
+  audio.volume = 0.4;
+
   audio.play().catch(() => {
-    // ignore autoplay errors
+    // autoplay error ignored
   });
 }
