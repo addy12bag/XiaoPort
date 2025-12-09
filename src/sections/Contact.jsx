@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import emailjs from "@emailjs/browser"; // EmailJS import
 
 function ContactRow({ label, value, href }) {
   return (
@@ -29,38 +30,36 @@ function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ⭐ Your NEW Vercel backend URL:
-  const BACKEND_URL =
-    "https://portfolio-backend-l9ma-fugk6cyzu-addy12bags-projects.vercel.app/api/send-email";
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     setStatus("Sending...");
     setStatusType("loading");
 
-    try {
-      const response = await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+    const params = {
+      name: form.name,
+      email: form.email,
+      title: "Portfolio Contact",
+      message: form.message,
+    };
 
-      const data = await response.json();
-
-      if (data.success) {
+    emailjs
+      .send(
+        "service_sevllvl",   // ✔ Your Service ID
+        "template_w23rvi2",  // ✔ Your Template ID
+        params,
+        "_Kvk1pKlygnp_UY2N"  // ✔ Your Public Key
+      )
+      .then(() => {
         setStatus("Message sent successfully!");
         setStatusType("success");
         setForm({ name: "", email: "", message: "" });
-      } else {
-        setStatus("Failed to send message.");
+      })
+      .catch((error) => {
+        console.error(error);
+        setStatus("Failed to send message. Please try again.");
         setStatusType("error");
-      }
-    } catch (error) {
-      console.error(error);
-      setStatus("Server Error — please try again.");
-      setStatusType("error");
-    }
+      });
   };
 
   return (
