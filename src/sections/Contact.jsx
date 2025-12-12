@@ -6,12 +6,7 @@ function ContactRow({ label, value, href }) {
     <div className="contact-row">
       <span className="contact-label">{label}</span>
       {href ? (
-        <a
-          href={href}
-          target="_blank"
-          rel="noreferrer"
-          className="contact-value"
-        >
+        <a href={href} target="_blank" rel="noreferrer" className="contact-value">
           {value}
         </a>
       ) : (
@@ -39,10 +34,10 @@ function Contact() {
 
     emailjs
       .sendForm(
-        "service_sevllvl",        // ✔ Your Service ID
-        "template_w23rvi2",       // ✔ Your Template ID
+        "service_sevllvl",       // Your Service ID
+        "template_w23rvi2",      // Your Template ID
         formRef.current,
-        "_Kvk1pKlygnp_UY2N"       // ✔ Your Public Key
+        "_Kvk1pKlygnp_UY2N"      // Your Public Key
       )
       .then(
         () => {
@@ -62,18 +57,16 @@ function Contact() {
       <div className="section-header">
         <h2>Open a Channel</h2>
         <p className="section-subtitle">
-          Ready to collaborate on intelligent systems, full-stack products, or
-          AI-driven experiences.
+          Ready to collaborate on intelligent systems, full-stack products,
+          or AI-driven experiences.
         </p>
       </div>
 
       <div className="contact-grid">
-        {/* ---------- LEFT SIDE INFO ---------- */}
         <div className="contact-info">
           <p>
-            Whether it’s a research-backed ML system, a production-ready web
-            app, or a sensor-driven automation project — I’d love to hear from
-            you.
+            Whether it’s a research-backed ML system or a production-ready app —
+            I’d love to hear from you.
           </p>
 
           <div className="contact-links">
@@ -97,12 +90,7 @@ function Contact() {
           </div>
         </div>
 
-        {/* ---------- RIGHT SIDE FORM ---------- */}
-        <form
-          ref={formRef}
-          className="contact-form"
-          onSubmit={handleSubmit}
-        >
+        <form ref={formRef} className="contact-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <label>
               Name
@@ -149,7 +137,6 @@ function Contact() {
             {statusType === "loading" ? "Sending..." : "Send Signal"}
           </button>
 
-          {/* STATUS MESSAGE */}
           {status && (
             <p
               style={{
