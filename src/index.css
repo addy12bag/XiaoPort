@@ -368,71 +368,138 @@ body {
 .btn-full {
   width: 100%;
 }
-
-/* =========================================================
-   ABOUT
+/*/* =========================================================
+   ABOUT (CLEAN + FINAL)
    ========================================================= */
 
 .about-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
-  gap: 26px;
+  grid-template-columns: 0.45fr 1.55fr;  /* RIGHT COLUMN MUCH WIDER */
+  gap: 40px;
 }
 
+/* NEW: Rule to make the Education Timeline span both columns within the grid */
+.about-grid > .timeline-section-wrapper {
+  grid-column: 1 / 3; /* Spans from the first column line to the third (end) line */
+  margin-top: 50px; /* Add vertical separation between text/photo and education */
+}
+
+/* ------------------------------
+   ABOUT PHOTO
+------------------------------ */
 .about-photo {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
 }
 
 .about-img {
-  width: 240px;
-  height: 240px;
+  width: 260px;
+  height: 260px;
   border-radius: 22px;
   object-fit: cover;
   border: 2px solid var(--accent-soft);
-  box-shadow: 0 0 25px rgba(85,245,255,0.25);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 0 30px rgba(85,245,255,0.22);
+  transition: 0.4s ease;
 }
 
 .about-img:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 40px rgba(85,245,255,0.45);
+  box-shadow: 0 0 45px rgba(85,245,255,0.45);
 }
 
+/* ------------------------------
+   ABOUT TEXT
+------------------------------ */
 .about-text p {
-  line-height: 1.7;
-  font-size: 0.98rem;
-  margin-bottom: 14px;
+  line-height: 1.75;
+  font-size: 1rem;
+  margin-bottom: 18px;
 }
 
-.about-education {
+/* =========================================================
+   EDUCATION – WIDE RECTANGLE VERSION
+   ========================================================= */
+
+/* NEW: Wrapper to control alignment of the timeline box */
+/* NEW: Wrapper to control alignment of the timeline box */
+.timeline-section-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.timeline-box {
   background: var(--bg-soft);
   border: 1px solid var(--border-subtle);
-  padding: 18px;
+  padding: 32px;
   border-radius: var(--radius-lg);
+  max-width: 650px;
+  width: 100%;
+  margin: 0;
 }
 
-.about-education h3 {
-  margin: 0;
+.timeline-box h3 {
+  margin: 0 0 22px 0;
   text-transform: uppercase;
   color: var(--accent-strong);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.15em;
 }
 
-.about-education ul {
-  padding: 0;
-  margin: 14px 0 0;
-  list-style: none;
-  display: flex;
-  gap: 12px;
-  flex-direction: column;
+/* Line */
+.timeline {
+  position: relative;
+  padding-left: 55px; /* MORE SPACE — perfect for dot + text */
+  border-left: 2px solid rgba(85, 245, 255, 0.22);
 }
 
-.about-education li {
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  gap: 10px;
+/* Timeline Item */
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+/* Dot — perfect vertical + horizontal alignment */
+.timeline-dot {
+  position: absolute;
+  left: -11px;     /* moves dot away from text */
+  top: 4px;        /* lines up with the middle of the date text */
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(85, 245, 255, 0.9);
+}
+
+/* DATE — fixed spacing from dot */
+.timeline-date {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--accent-strong);
+  margin-left: 10px; /* more breathing room */
+  margin-bottom: 6px;
+}
+
+/* Content aligned perfectly under the date */
+.timeline-content h4,
+.timeline-content p {
+  margin-left: 10px; /* EXACT alignment with the date */
+}
+
+.timeline-content h4 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+.timeline-content p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
 }
 
 /* =========================================================

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 
 function ContactRow({ label, value, href }) {
   return (
@@ -21,45 +22,39 @@ function ContactRow({ label, value, href }) {
 }
 
 function Contact() {
+  const formRef = useRef();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("");
-  const [statusType, setStatusType] = useState(""); // success | error | loading
+  const [statusType, setStatusType] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 📌 UPDATE THIS URL — Your Render backend link:
-  const BACKEND_URL = "https://xiaodrog.onrender.com/send-email";
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     setStatus("Sending...");
     setStatusType("loading");
 
-    try {
-      const response = await fetch("https://xiaodrog.onrender.com/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setStatus("Message sent successfully!");
-        setStatusType("success");
-        setForm({ name: "", email: "", message: "" });
-      } else {
-        setStatus("Failed to send message.");
-        setStatusType("error");
-      }
-    } catch (error) {
-      console.error(error);
-      setStatus("Server Error — backend may be sleeping.");
-      setStatusType("error");
-    }
+    emailjs
+      .sendForm(
+        "service_sevllvl",        // ✔ Your Service ID
+        "template_w23rvi2",       // ✔ Your Template ID
+        formRef.current,
+        "_Kvk1pKlygnp_UY2N"       // ✔ Your Public Key
+      )
+      .then(
+        () => {
+          setStatus("Message sent successfully!");
+          setStatusType("success");
+          setForm({ name: "", email: "", message: "" });
+        },
+        () => {
+          setStatus("Failed to send message. Try again.");
+          setStatusType("error");
+        }
+      );
   };
 
   return (
@@ -97,13 +92,17 @@ function Contact() {
             <ContactRow
               label="Resume / Drive"
               value="View Documents"
-              href="https://drive.google.com/drive/folders/1Vwo35rZvPthSQ4Ae_kuKGp_0J_7QUn_g"
+              href="https://drive.google.com/file/d/1s26TEXczYlLjEzmQCXk7FN2Oi9Kr_cVq/view?usp=sharing"
             />
           </div>
         </div>
 
         {/* ---------- RIGHT SIDE FORM ---------- */}
-        <form className="contact-form" onSubmit={handleSubmit}>
+        <form
+          ref={formRef}
+          className="contact-form"
+          onSubmit={handleSubmit}
+        >
           <div className="form-row">
             <label>
               Name

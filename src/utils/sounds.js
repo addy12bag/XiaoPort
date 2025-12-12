@@ -1,16 +1,15 @@
+// Background music (loops)
+export const bgMusic = new Audio("/ai-orb-portfolio/src/assets/sounds/mixkit-romantic-659.mp3");
+bgMusic.loop = true;
+bgMusic.volume = 0.35;
+
+// Click sound only
 export function playUiSound(type, enabled) {
-  if (!enabled) return; // sound off → do nothing
+  if (!enabled) return;
 
-  let src = null;
-
-  if (type === "click") src = "/sounds/click.wav";
-  if (type === "section") src = "/sounds/section-change.wav";
-
-  if (!src) return;
-
-  const audio = new Audio(src);
-  audio.volume = 0.4; // keep subtle
-  audio.play().catch(() => {
-    // ignore autoplay errors
-  });
+  if (type === "click") {
+    const audio = new Audio("/ai-orb-portfolio/src/assets/sounds/click.wav");
+    audio.volume = 0.4;
+    audio.play().catch(() => {});
+  }
 }

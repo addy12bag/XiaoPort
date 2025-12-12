@@ -10,7 +10,7 @@ import Skills from "./sections/Skills";
 import Projects from "./sections/Projects";
 import Contact from "./sections/Contact";
 
-import { playUiSound } from "./utils/sounds";
+import { playUiSound, bgMusic } from "./utils/sounds";
 
 const sections = [
   { id: "hero", label: "Home" },
@@ -25,6 +25,9 @@ function App() {
   const [cursorPos, setCursorPos] = useState({ x: 0.5, y: 0.3 });
   const [soundEnabled, setSoundEnabled] = useState(false);
 
+  /* -------------------------------
+     ORB MOUSE MOVEMENT
+  -------------------------------- */
   const handleMouseMove = useCallback((e) => {
     setCursorPos({
       x: e.clientX / window.innerWidth,
@@ -32,11 +35,15 @@ function App() {
     });
   }, []);
 
+  /* -------------------------------
+     SECTION DETECTION ON SCROLL
+  -------------------------------- */
   useEffect(() => {
     const handleScroll = () => {
       const offsets = sections.map((section) => {
         const el = document.getElementById(section.id);
         if (!el) return { id: section.id, offset: Infinity };
+
         const rect = el.getBoundingClientRect();
         return { id: section.id, offset: Math.abs(rect.top) };
       });
@@ -45,20 +52,59 @@ function App() {
 
       if (offsets[0] && offsets[0].id !== activeSection) {
         setActiveSection(offsets[0].id);
-        playUiSound("section", soundEnabled);
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeSection, soundEnabled]);
+  }, [activeSection]);
 
+  /* -------------------------------
+     BACKGROUND MUSIC AUTO-START
+  -------------------------------- */
+  useEffect(() => {
+    const startMusicOnInteraction = () => {
+      if (soundEnabled) {
+        bgMusic.loop = true;
+        bgMusic.volume = 0.35;
+        bgMusic.play().catch(() => {});
+      }
+      window.removeEventListener("click", startMusicOnInteraction);
+    };
+
+    window.addEventListener("click", startMusicOnInteraction);
+    return () => window.removeEventListener("click", startMusicOnInteraction);
+  }, [soundEnabled]);
+
+  /* -------------------------------
+     SCROLL WITH CLICK SOUND
+  -------------------------------- */
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
+
     playUiSound("click", soundEnabled);
+  };
+
+  /* -------------------------------
+     SOUND TOGGLE CONTROL
+  -------------------------------- */
+  const handleToggleSound = () => {
+    setSoundEnabled((prev) => {
+      const enabled = !prev;
+
+      if (enabled) {
+        bgMusic.loop = true;
+        bgMusic.volume = 0.35;
+        bgMusic.play().catch(() => {});
+      } else {
+        bgMusic.pause();
+      }
+
+      return enabled;
+    });
   };
 
   return (
@@ -69,7 +115,7 @@ function App() {
         activeSection={activeSection}
         onNavClick={scrollToSection}
         soundEnabled={soundEnabled}
-        onToggleSound={() => setSoundEnabled((prev) => !prev)}
+        onToggleSound={handleToggleSound}
       />
 
       <main>
